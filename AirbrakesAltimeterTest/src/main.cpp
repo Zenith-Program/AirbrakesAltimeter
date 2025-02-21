@@ -16,7 +16,8 @@ void setup() {
     bno.setExtCrystalUse(true); // Use external crystal for better accuracy
 
     Serial.println("Setting operation mode to NDOF...");
-    bno.setMode(0x0C);
+    adafruit_bno055_opmode_t operation = OPERATION_MODE_NDOF;
+    bno.setMode(operation);
 
     // Commented properly to avoid syntax errors
     /*
@@ -68,12 +69,35 @@ void loop() {
 
     // Get Euler angles
     imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
-    Serial.print("X: ");
+
+    Serial.print("Heading (Yaw): ");
     Serial.print(euler.x());
-    Serial.print(" Y: ");
+    Serial.print("°, Roll: ");
     Serial.print(euler.y());
-    Serial.print(" Z: ");
+    Serial.print("°, Pitch: ");
     Serial.println(euler.z());
+
+    // Get gravity vector
+    imu::Vector<3> gravity = bno.getVector(Adafruit_BNO055::VECTOR_GRAVITY);
+
+    Serial.print("Gravity Vector (m/s²) -> X: ");
+    Serial.print(gravity.x(), 2);
+    Serial.print(", Y: ");
+    Serial.print(gravity.y(), 2);
+    Serial.print(", Z: ");
+    Serial.println(gravity.z(), 2);
+
+    delay(100);
+
+
+    // Get linear acceleration
+    imu::Vector<3> linear_accel = bno.getVector(Adafruit_BNO055::VECTOR_LINEARACCEL);
+    Serial.print("Linear Acceleration X: ");
+    Serial.print(linear_accel.x());
+    Serial.print(" Y: ");
+    Serial.print(linear_accel.y());
+    Serial.print(" Z: ");
+    Serial.println(linear_accel.z());
 
     delay(100);
 }
